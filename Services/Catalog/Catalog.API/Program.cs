@@ -25,7 +25,9 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 var assemblies = new Assembly[]
 {
     Assembly.GetExecutingAssembly(),
-    typeof(GetAllBrandsHandler).Assembly
+    typeof(GetAllBrandsHandler).Assembly,
+    typeof(GetAllTypesHandler).Assembly
+    
 };
 
 builder.Services.AddMediatR(cgg => cgg.RegisterServicesFromAssemblies(assemblies));
