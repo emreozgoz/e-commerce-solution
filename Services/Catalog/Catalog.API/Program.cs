@@ -26,8 +26,8 @@ var assemblies = new Assembly[]
 {
     Assembly.GetExecutingAssembly(),
     typeof(GetAllBrandsHandler).Assembly,
-    typeof(GetAllTypesHandler).Assembly
-    
+    typeof(GetAllTypesHandler).Assembly,
+    typeof(GetAllProductsHandler).Assembly,
 };
 
 builder.Services.AddMediatR(cgg => cgg.RegisterServicesFromAssemblies(assemblies));
