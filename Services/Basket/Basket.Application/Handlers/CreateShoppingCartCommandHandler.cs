@@ -28,7 +28,7 @@ namespace Basket.Application.Handlers
             {
                 var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
                 item.Price -= coupon.Amount;
-            };
+            }
             var shoppingCart = await _basketRepository.UpdateBasket(new ShoppingCart
             {
                 Items = request.Items,
