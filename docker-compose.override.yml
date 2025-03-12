@@ -52,6 +52,7 @@ services:
             - "DatabaseSettings__CollectionName=Products" 
             - "DatabaseSettings__BrandsCollection=Brands" 
             - "DatabaseSettings__TypesCollection=Types" 
+            - "ElasticConfiguration__Uri=http://elasticsearch:9200" 
         depends_on:
             - catalogdb    
         ports:
@@ -64,6 +65,7 @@ services:
             - "CacheSettings__ConnectionString=basketdb:6379"   
             - "GrpcSettings__DiscountUrl=http://discount.api:8080" 
             - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672" 
+            - "ElasticConfiguration__Uri=http://elasticsearch:9200"  
         depends_on:
             - basketdb
             - rabbitmq 
@@ -73,7 +75,8 @@ services:
         container_name: discount.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "DatabaseSettings__ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=12345"       
+            - "DatabaseSettings__ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=12345"    
+            - "ElasticConfiguration__Uri=http://elasticsearch:9200"  
         depends_on: 
             - discountdb
         ports:
@@ -84,9 +87,10 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development
             - "ConnectionStrings__OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Emree1234567;TrustServerCertificate=True"
             - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672" 
+            - "ElasticConfiguration__Uri=http://elasticsearch:9200"
         depends_on:
             - orderdb
-            - rabbitmq 
+            - rabbitmq
         ports:
             - "8003:8080" 
         command: >
@@ -113,7 +117,25 @@ services:
             - portainer_data:/data 
    
             
+    elasticsearch:
+        container_name: elasticsearch
+        environment:
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m" 
+            - discovery.type=single-node
+            - xpack.security.enabled=false 
+        ports:
+            - "9200:9200"  
+        volumes:
+            - elasticsearch-data:/usr/share/elasticsearch/data  
 
+    kibana:
+        container_name: kibana
+        environment:
+            - ELASTICSEARCH_URL="http://elasticsearch:9200"
+        depends_on:
+            - elasticsearch
+        ports:
+            - "5601:5601" 
 
 
 
