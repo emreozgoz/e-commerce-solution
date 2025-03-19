@@ -13,9 +13,11 @@ using System.Net;
 
 namespace Basket.API.Controllers
 {
-
-    public class BasketController : APIController
-    {
+    [Asp.Versioning.ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController]
+    public class BasketController : ControllerBase
+    {   
         private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<BasketController> _logger;
